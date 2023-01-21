@@ -1,10 +1,41 @@
 package com.mystore.ecommerce.model;
 
-public class User {
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
+@Entity
+public class Customer {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id;
+
+    @NotNull(message = "Name cannot be null")
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @NotNull
+    @Email
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Pattern(regexp = "\\d{12}")
+    @Column(unique = true, nullable = false)
     private String customerId;
+
+    @NotNull(message = "Name cannot be null")
+    @Column(nullable = false)
     private String password;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -37,4 +68,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
+
 }
