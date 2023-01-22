@@ -1,6 +1,5 @@
 package com.mystore.ecommerce.model;
 
-import com.mystore.ecommerce.api.register.RegisterCustomerRequest;
 import jakarta.persistence.*;
 
 @Entity
