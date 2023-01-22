@@ -1,12 +1,12 @@
 package com.mystore.ecommerce.controller;
 
-import com.mystore.ecommerce.model.Customer;
-
+import com.mystore.ecommerce.api.login.LoginCustomerRequest;
+import com.mystore.ecommerce.api.login.LoginCustomerResponse;
+import com.mystore.ecommerce.api.register.RegisterCustomerRequest;
+import com.mystore.ecommerce.api.register.RegisterCustomerResponse;
 import com.mystore.ecommerce.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,25 +19,31 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/")
-    public String getHello() {
-        return "hello";
-    }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer) {
+    public RegisterCustomerResponse registerCustomer(@Valid @RequestBody RegisterCustomerRequest registerCustomerRequest) {
         try {
-            customerService.createCustomer(customer);
+            customerService.createCustomer(registerCustomerRequest);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new RegisterCustomerResponse.Builder()
+                    .response("Error")
+                    .build();
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new RegisterCustomerResponse.Builder()
+                .response("Created")
+                .build();
     }
 
-    @GetMapping("/get")
-    public Customer getCustomer(@RequestBody Customer customer) {
-
-        return customerService.getCustomer(customer.getCustomerId());
+    @PostMapping ("/login")
+    public String getCustomer(@Valid @RequestBody LoginCustomerRequest loginCustomerRequest) {
+        try {
+            if(customerService.getCustomer(loginCustomerRequest)) {
+                return "Logged in";
+            }
+        } catch (Exception e) {
+            return "Error";
+        }
+        return "Wrong email or password";
 
     }
 

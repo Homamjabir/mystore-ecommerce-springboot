@@ -1,29 +1,27 @@
-package com.mystore.ecommerce.model;
+package com.mystore.ecommerce.api.register;
 
-import com.mystore.ecommerce.api.register.RegisterCustomerRequest;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
-@Entity
-public class Customer {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+public class RegisterCustomerRequest {
 
-    @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Column(unique = true, nullable = false)
+    @Pattern(regexp = "\\d{12}")
+    @NotNull
     private String customerId;
 
-    @Column(nullable = false)
+    @NotNull
+    private String username;
+
+    @Email
+    @NotNull
+    private String email;
+
+    @NotNull
     private String password;
 
-    public Customer() {}
-
+    public RegisterCustomerRequest() {}
 
     public static class Builder {
         private String customerId;
@@ -51,12 +49,12 @@ public class Customer {
             return this;
         }
 
-        public Customer build() {
-            return new Customer(this);
+        public RegisterCustomerRequest build() {
+            return new RegisterCustomerRequest(this);
         }
     }
 
-    private Customer(Builder builder) {
+    private RegisterCustomerRequest(Builder builder) {
         this.customerId = builder.customerId;
         this.username = builder.username;
         this.email = builder.email;
@@ -78,7 +76,5 @@ public class Customer {
     public String getPassword() {
         return password;
     }
-
-
 
 }
